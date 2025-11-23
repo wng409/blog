@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的博客 - 分享技术与想法</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --hw-red: #e60012; /* 华为红 */
+            --hw-white: #ffffff; /* 白色 */
+            --hw-light-gray: #f5f5f5; /* 浅灰背景 */
+            --hw-dark-gray: #333333; /* 深灰文字 */
+            --hw-medium-gray: #666666; /* 中灰文字 */
+            --hw-border: #e6e6e6; /* 边框色 */
+        }
+        
+        body {
+            background-color: var(--hw-white);
+            color: var(--hw-dark-gray);
+            line-height: 1.6;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 顶部导航栏 */
+        header {
+            background-color: var(--hw-white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            color: var(--hw-red);
+            margin-right: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            padding: 5px 0;
+        }
+        
+        .nav-links a:hover {
+            color: var(--hw-red);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--hw-red);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        var(--hw-light-gray);
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: var(--hw-dark-gray);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--hw-medium-gray);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--hw-red);
+            color: var(--hw-white);
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #c4000f;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(230, 0, 18, 0.3);
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            padding: 80px 0;
+            background-color: var(--hw-white);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--hw-dark-gray);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--hw-red);
+        }
+        
+        .section-title p {
+            color: var(--hw-medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 博客文章网格 */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .blog-card {
+            background: var(--hw-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--hw-border);
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-image {
+            height: 200px;
+            background-color: var(--hw-light-gray);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        
+        .blog-card:hover .card-image::after {
+            opacity: 0.6;
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .card-content h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            line-height: 1.4;
+        }
+        
+        .card-content p {
+            color: var(--hw-medium-gray);
+            margin-bottom: 20px;
+        }
+        
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--hw-medium-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            color: var(--hw-red);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .read-more i {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .read-more:hover i {
+            transform: translateX(3px);
+        }
+        
+        /* 关于我区域 */
+        .about-section {
+            background-color: var(--hw-light-gray);
+            padding: 80px 0;
+        }
+        
+        .about-container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .about-image {
+            flex: 1;
+            height: 400px;
+            background-color: var(--hw-border);
+            border-radius: 8px;
+            overflow: hidden;
+            background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .about-content {
+            flex: 1;
+        }
+        
+        .about-content h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--hw-dark-gray);
+        }
+        
+        .about-content p {
+            margin-bottom: 20px;
+            color: var(--hw-medium-gray);
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .skill-tag {
+            background-color: var(--hw-white);
+            color: var(--hw-medium-gray);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid var(--hw-border);
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--hw-dark-gray);
+            color: var(--hw-white);
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--hw-red);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #B0B0B0;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--hw-white);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--hw-red);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #B0B0B0;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .about-container {
+                flex-direction: column;
+            }
+            
+            .about-image {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0 10px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span>TechBlog</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#blog">技术与项目</a></li>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>探索前沿技术，分享开发心得</h1>
+            <p>一名热爱技术的开发者，在这里记录学习历程，分享技术见解，与志同道合的人共同进步</p>
+            <a href="#blog" class="cta-button">阅读最新文章</a>
+        </div>
+    </section>
+
+    <!-- 博客文章部分 -->
+    <section class="main-content" id="blog">
+        <div class="container">
+            <div class="section-title">
+                <h2>最新项目</h2>
+                <p>分享最近搞得一些玩意儿</p>
+            </div>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span><i class="far fa-calendar"></i> 2025-11-22</span>
+                            <span><i class="far fa-folder"></i> HTML5</span>
+                        </div>
+                        <h3>探索HTML5网页做播放器的可能性</h3>
+                        <p>探索HTML5作为播放器并支持在线离线播放功能，使用HTML，CSS，JavaScript</p>
+                        <a href="https://github.com/wng409/h5player" class="read-more">查看项目 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span><i class="far fa-calendar"></i> 2025-11-19</span>
+                            <span><i class="far fa-folder"></i> HTML5</span>
+                        </div>
+                        <h3>运用HTML5技术给好友写一个生日祝福</h3>
+                        <p>从零构建高效可用生日祝福web，深入探讨GitHubPage部署与仓库管理。</p>
+                        <a href="https://wng409.github.io/github.io-wng409-happybirthday-" class="read-more">查看样例<i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span><i class="far fa-calendar"></i> 2025-11-23</span>
+                            <span><i class="far fa-folder"></i> Fuck Seewo</span>
+                        </div>
+                        <h3>解除希沃集控对电脑的不合理限制</h3>
+                        <p>探讨如何将学校电脑从集控不合理限制中解除，满足广大人民群众对连接互联网的需求。</p>
+                        <a href="https://github.com/wng409/seewo-pwv3" class="read-more">查看项目 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我部分 -->
+    <section class="about-section" id="about">
+        <div class="container about-container">
+            <div class="about-image">
+                <!-- 这里可以放置个人图片 -->
+            </div>
+            <div class="about-content">
+                <h2>关于我</h2>
+                <p>一名小肥物，专注于写奇奇怪怪的Web和与seewo斗智斗勇。拥有数年呼吸经验，热爱探索新技术，乐于作妖。</p>
+                <p>在日常生活中，主要负责对华为终端某型号4G通讯终端前端系统UX动画使用与鉴赏、性能测试与seewo集控漏洞研究。热衷于开源社区，是多个知名开源项目的使用者。</p>
+                <div class="skills">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Scratch</span>
+                    <span class="skill-tag">HTML5</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">首页</a></li>
+                        <li><a href="#blog">技术与项目</a></li>
+                        <li><a href="#about">关于我</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                  
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>联系我</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> mc52634903@163.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 中国
+                    </ul>
+                    <div class="social-links">
+                        <a href="https://github.com/wng409"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 我的技术博客. 保留所有权利. | 遵循 MIT 开源协议</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.08)';
+            }
+        });
+    </script>
+</body>
+</html>
