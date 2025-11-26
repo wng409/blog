@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术与项目 - 我的博客</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --hw-red: #e60012; /* 华为红 */
+            --hw-white: #ffffff; /* 白色 */
+            --hw-light-gray: #f5f5f5; /* 浅灰背景 */
+            --hw-dark-gray: #333333; /* 深灰文字 */
+            --hw-medium-gray: #666666; /* 中灰文字 */
+            --hw-border: #e6e6e6; /* 边框色 */
+        }
+        
+        body {
+            background-color: var(--hw-white);
+            color: var(--hw-dark-gray);
+            line-height: 1.6;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 顶部导航栏 */
+        header {
+            background-color: var(--hw-white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            color: var(--hw-red);
+            margin-right: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+            padding: 5px 0;
+        }
+        
+        .nav-links a:hover {
+            color: var(--hw-red);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--hw-red);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* 页面标题区域 */
+        .page-title {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        var(--hw-light-gray);
+            padding: 80px 0 40px;
+            text-align: center;
+        }
+        
+        .page-title h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: var(--hw-dark-gray);
+        }
+        
+        .page-title p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--hw-medium-gray);
+        }
+        
+        /* 筛选和排序控件 */
+        .filter-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: var(--hw-white);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--hw-border);
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            color: var(--hw-dark-gray);
+        }
+        
+        .tag-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tag-filter {
+            padding: 6px 12px;
+            background-color: var(--hw-light-gray);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--hw-border);
+        }
+        
+        .tag-filter:hover {
+            background-color: var(--hw-border);
+        }
+        
+        .tag-filter.active {
+            background-color: var(--hw-red);
+            color: var(--hw-white);
+            border-color: var(--hw-red);
+        }
+        
+        .sort-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .sort-btn {
+            padding: 8px 16px;
+            background-color: var(--hw-light-gray);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--hw-border);
+        }
+        
+        .sort-btn:hover {
+            background-color: var(--hw-border);
+        }
+        
+        .sort-btn.active {
+            background-color: var(--hw-red);
+            color: var(--hw-white);
+            border-color: var(--hw-red);
+        }
+        
+        /* 文章内容区域 */
+        .articles-content {
+            padding: 20px 0 60px;
+            background-color: var(--hw-white);
+        }
+        
+        .articles-list {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .article-item {
+            background: var(--hw-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--hw-border);
+            padding: 30px;
+        }
+        
+        .article-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .article-header {
+            margin-bottom: 20px;
+        }
+        
+        .article-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--hw-dark-gray);
+        }
+        
+        .article-meta {
+            display: flex;
+            color: var(--hw-medium-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+        
+        .article-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .article-tag {
+            padding: 4px 10px;
+            background-color: var(--hw-light-gray);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--hw-medium-gray);
+        }
+        
+        .article-body {
+            margin-bottom: 25px;
+        }
+        
+        .article-body p {
+            color: var(--hw-medium-gray);
+            margin-bottom: 15px;
+        }
+        
+        .article-image {
+            width: 100%;
+            height: 300px;
+            background-color: var(--hw-light-gray);
+            background-size: cover;
+            background-position: center;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .article-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .project-link {
+            color: var(--hw-red);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .project-link i {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .project-link:hover i {
+            transform: translateX(3px);
+        }
+        
+        /* 没有匹配文章时的提示 */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--hw-medium-gray);
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--hw-border);
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--hw-dark-gray);
+            color: var(--hw-white);
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--hw-red);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #B0B0B0;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--hw-white);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--hw-red);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #B0B0B0;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0 10px;
+            }
+            
+            .page-title h1 {
+                font-size: 2.2rem;
+            }
+            
+            .page-title p {
+                font-size: 1rem;
+            }
+            
+            .article-item {
+                padding: 20px;
+            }
+            
+            .article-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .tag-filters {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span>TechBlog</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="passage.html">技术与项目</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+                <li><a href="index.html#contact">联系</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 页面标题区域 -->
+    <section class="page-title">
+        <div class="container">
+            <h1>技术与项目</h1>
+            <p>记录我的技术探索与项目实践</p>
+        </div>
+    </section>
+
+    <!-- 筛选和排序控件 -->
+    <div class="container">
+        <div class="filter-controls">
+            <div class="filter-group">
+                <div class="filter-label">筛选标签:</div>
+                <div class="tag-filters">
+                    <div class="tag-filter active" data-tag="all">全部</div>
+                    <div class="tag-filter" data-tag="HTML5">HTML5</div>
+                    <div class="tag-filter" data-tag="Fuck Seewo">Fuck Seewo</div>
+                    <div class="tag-filter" data-tag="Python">Python</div>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div class="filter-label">排序方式:</div>
+                <div class="sort-options">
+                    <div class="sort-btn active" data-sort="newest">最新优先</div>
+                    <div class="sort-btn" data-sort="oldest">最旧优先</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文章内容区域 -->
+    <section class="articles-content">
+        <div class="container">
+            <div class="articles-list" id="articles-list">
+                <!-- 文章将通过JavaScript动态加载 -->
+            </div>
+            <div class="no-results" id="no-results" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>没有找到匹配的文章</h3>
+                <p>请尝试选择其他标签</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="passage.html">技术与项目</a></li>
+                        <li><a href="index.html#about">关于我</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                  
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>联系我</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> mc52634903@163.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 中国
+                    </ul>
+                    <div class="social-links">
+                        <a href="https://github.com/wng409"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 我的技术博客. 保留所有权利. | 遵循 MIT 开源协议</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 文章数据 - 只保留原有的三篇文章
+        const articles = [
+            {
+                id: "h5player",
+                title: "探索HTML5网页做播放器的可能性",
+                date: "2025-11-22",
+                tags: ["HTML5"],
+                readTime: "5分钟",
+                image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>探索HTML5作为播放器并支持在线离线播放功能，使用HTML，CSS，JavaScript。</p>
+                    <p>主要功能包括：</p>
+                    <ul>
+                        <li>支持多种视频格式（MP4、WebM、OGG）</li>
+                        <li>在线流媒体播放</li>
+                        <li>离线下载和播放</li>
+                        <li>自定义播放控制界面</li>
+                        <li>播放列表管理</li>
+                    </ul>
+                    <p>这个项目使用了HTML、CSS和JavaScript，没有依赖任何第三方播放器库，完全基于原生Web技术实现。</p>
+                `,
+                link: "https://github.com/wng409/h5player",
+                linkText: "查看项目源码"
+            },
+            {
+                id: "birthday",
+                title: "运用HTML5技术给好友写一个生日祝福",
+                date: "2025-11-19",
+                tags: ["HTML5"],
+                readTime: "3分钟",
+                image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>从零构建高效可用生日祝福web，深入探讨GitHubPage部署与仓库管理。</p>
+                    <p>项目特点：</p>
+                    <ul>
+                        <li>响应式设计，适配各种设备</li>
+                        <li>动画效果和交互体验</li>
+                        <li>音乐播放和祝福语展示</li>
+                        <li>照片轮播展示</li>
+                        <li>一键部署到GitHub Pages</li>
+                    </ul>
+                    <p>通过这个项目，我学习了如何将静态网站部署到GitHub Pages，以及如何优化网页加载速度和用户体验。</p>
+                `,
+                link: "https://wng409.github.io/github.io-wng409-happybirthday/",
+                linkText: "查看在线演示"
+            },
+            {
+                id: "seewo",
+                title: "解除希沃集控对电脑的不合理限制",
+                date: "2025-11-23",
+                tags: ["Fuck Seewo"],
+                readTime: "7分钟",
+                image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                content: `
+                    <p>探讨如何将学校电脑从集控不合理限制中解除，满足广大人民群众对连接互联网的需求。</p>
+                    <p>项目背景：学校的希沃集控系统限制了电脑的许多功能，包括网络访问、软件安装等，影响了正常的学习和研究。</p>
+                    <p>解决方案包括：</p>
+                    <ul>
+                        <li>分析希沃集控系统的运行机制</li>
+                        <li>寻找系统漏洞和后门</li>
+                        <li>开发绕过限制的工具</li>
+                        <li>恢复网络连接功能</li>
+                        <li>隐藏活动不被系统检测</li>
+                    </ul>
+                    <p>请注意：此项目仅供学习和研究目的，请勿用于非法用途。</p>
+                `,
+                link: "https://github.com/wng409/seewo-pwv3",
+                linkText: "查看项目源码"
+            }
+        ];
+
+        // 当前筛选和排序状态
+        let currentFilter = "all";
+        let currentSort = "newest";
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            renderArticles();
+            setupEventListeners();
+        });
+
+        // 渲染文章列表
+        function renderArticles() {
+            const articlesList = document.getElementById('articles-list');
+            const noResults = document.getElementById('no-results');
+            
+            // 筛选文章
+            let filteredArticles = articles.filter(article => {
+                if (currentFilter === "all") return true;
+                return article.tags.includes(currentFilter);
+            });
+            
+            // 如果没有匹配的文章
+            if (filteredArticles.length === 0) {
+                articlesList.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            // 排序文章
+            filteredArticles.sort((a, b) => {
+                if (currentSort === "newest") {
+                    return new Date(b.date) - new Date(a.date);
+                } else {
+                    return new Date(a.date) - new Date(b.date);
+                }
+            });
+            
+            // 生成HTML
+            articlesList.innerHTML = filteredArticles.map(article => `
+                <article class="article-item" id="${article.id}">
+                    <div class="article-header">
+                        <h2>${article.title}</h2>
+                        <div class="article-meta">
+                            <span><i class="far fa-calendar"></i> ${article.date}</span>
+                            <span><i class="far fa-clock"></i> 阅读时间: ${article.readTime}</span>
+                        </div>
+                        <div class="article-tags">
+                            ${article.tags.map(tag => `<span class="article-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <div class="article-image" style="background-image: url('${article.image}');"></div>
+                        ${article.content}
+                    </div>
+                    <div class="article-footer">
+                        <a href="${article.link}" class="project-link">${article.linkText} <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 标签筛选
+            document.querySelectorAll('.tag-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    document.querySelectorAll('.tag-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-tag');
+                    renderArticles();
+                });
+            });
+            
+            // 排序选项
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentSort = this.getAttribute('data-sort');
+                    renderArticles();
+                });
+            });
+        }
+
+        // 平滑滚动（用于页面内锚点链接）
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // 如果是页面内链接，才阻止默认行为并平滑滚动
+                if(this.getAttribute('href').startsWith('#') && 
+                   this.getAttribute('href').length > 1) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.08)';
+            }
+        });
+    </script>
+</body>
+</html>
