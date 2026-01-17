@@ -188,6 +188,6 @@ https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=fo
 
 ---
 
-最后更新: 2025年11月
-版本: 1.0
+最后更新: 2026年1月
+版本: 1.1
 维护者: wng409
